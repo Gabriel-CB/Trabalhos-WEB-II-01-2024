@@ -13,6 +13,20 @@ function renderIndex(pageName, tableName){
 
         body.forEach((item) => {
 
+            const td =
+            body.append(
+                `<tr>` +
+                `      <th scope="row"></th>` +
+                `      <td></td>` +
+                `      <td></td>` +
+                `      <td></td>` +
+                `      <td>` +
+                `          <button type="button" class="btn btn-warning"><i class="fas fa-pencil-alt"></i></button>` +
+                `          <button type="button" class="btn btn-danger"><i class="fas fa-trash"></i></button>` +
+                `      </td>` +
+                ` < /tr>`
+            )
+
             body.append(
                 `<tr>` +
                 `      <th scope="row"></th>` +
@@ -30,7 +44,7 @@ function renderIndex(pageName, tableName){
 
         const notFound = document.createElement("h4");
         notFound.className = "no-register";
-        notFound.append("Nenhum Produto Encontrado!")
+        notFound.append(`No ${pageName} Encontrado!`)
         table.parentElement.append(notFound);
     }
 }
