@@ -1,4 +1,4 @@
-async function renderIndex(pageName, tableName, fields) {
+async function renderIndex(pageName, tableName, fields, coditions = null) {
     document.getElementById("page-name").textContent = pageName;
     const table = document.getElementById(tableName);
     const tableBody = document.querySelector(`#${tableName} tbody`);
@@ -10,7 +10,8 @@ async function renderIndex(pageName, tableName, fields) {
     const data = {
         model: pageName,
         event: "select",
-        values: fields
+        values: fields,
+        coditions: coditions
     }
 
     let response = await request(data);
@@ -38,7 +39,7 @@ async function renderIndex(pageName, tableName, fields) {
             tableBody.insertAdjacentHTML('beforeend',
                 `<tr> ${tableFiels}` +
                 `      <td>` +
-                `          <button type="button" onclick=" window.location.href = './addOrEdit.php?id=${item.id}';" class="btn btn-warning"><i class="fas fa-pencil-alt"></i></button>` +
+                (pageName == 'Carts' ? '' : `          <button type="button" onclick=" window.location.href = './addOrEdit.php?id=${item.id}';" class="btn btn-warning"><i class="fas fa-pencil-alt"></i></button>`) +
                 `          <button type="button" onclick="deleteItem('${pageName}', {id: ${item.id}})" class="btn btn-danger"><i class="fas fa-trash"></i></button>` +
                 `      </td>` +
                 ` </tr>`
@@ -108,6 +109,17 @@ async function addOrEdit(tableName, values, conditions = null, url = "./index.ph
 
         return response;
     }
+}
+
+async function addToCart(values) {
+
+    const data = {
+        "model": 'Carts',
+        "event": 'insert-cart',
+        "values": values,
+    }
+
+    return await request(data);
 }
 
 async function deleteItem(tableName, conditions) {

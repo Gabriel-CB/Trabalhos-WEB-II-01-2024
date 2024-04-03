@@ -40,6 +40,19 @@ try {
         case "update":
 
             die(json_encode($PDO->update($values, $conditions)));
+        case "insert-cart":
+
+            if (count($values['products']) == 0 || empty($values['products'])) {
+
+                throw new Exception("No one product selected.");
+            }
+
+            foreach ($values['products'] as $product) {
+
+                $PDO->insert(["product_id" => $product, "user_id" => $values['user_id']]);
+            }
+
+            die(json_encode(['success' => true]));
     }
 
 } catch (Exception $e) {

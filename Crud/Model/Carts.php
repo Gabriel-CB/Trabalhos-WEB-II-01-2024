@@ -1,11 +1,11 @@
 <?php
-require_once("../Model/Suppliers.php");
+require_once("../Model/Users.php");
+require_once("../Model/Products.php");
 
 class Carts
 {
 
-    public $TABLE_NAME = "products";
-
+    public $TABLE_NAME = "carts";
 
     /**
      * Create Products Table
@@ -15,15 +15,18 @@ class Carts
     public function createTable()
     {
 
-        $suppliers = new Suppliers();
-        return "{$suppliers->createTable()}" .
+        $users = new Users();
+        $products = new Products();
+
+        return "{$users->createTable()}" .
+            "{$products->createTable()}" .
             "   
-                CREATE TABLE if not exists products (
-                id INT (8) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR (50) NOT NULL,
-                price DECIMAL (10) NOT NULL,
-                supplier_id INT (8) NOT NULL,
-                FOREIGN KEY (supplier_id) REFERENCES suppliers(id)
+               CREATE TABLE IF NOT EXISTS carts (
+                id INT(8) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                product_id INT(8) UNSIGNED NOT NULL,
+                user_id INT(8) UNSIGNED NOT NULL,
+                FOREIGN KEY (product_id) REFERENCES products(id),
+                FOREIGN KEY (user_id) REFERENCES users(id)
                 );";
     }
 }

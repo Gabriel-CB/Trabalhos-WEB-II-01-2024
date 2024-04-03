@@ -20,6 +20,6 @@ class Users
             cellphone CHAR (15) NOT NULL,
             mail VARCHAR (50) NOT NULL,
             password  VARCHAR (255) NOT NULL
-            )";
+            );";
     }
 }

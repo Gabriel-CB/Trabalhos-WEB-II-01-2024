@@ -33,37 +33,16 @@ require_once("../Components/headerIndex.html");
 
             if (options.length > 0) {
 
-                /** Sharing the carts*/
-                const suppliers = await renderEdit("Suppliers", ["id", "name", "document", "age", "mail"], null, true);
-
-                if (suppliers != null && suppliers['data'] != null && suppliers['data'].length > 0) {
-
-                    suppliers['data'].forEach((item) => {
-                        document.getElementById("supplier-id").insertAdjacentHTML('beforeend',
-                            `<option value="${item.id}">` +
-                            `  ${item.name} - ${item.id}` +
-                            ` </option>`
-                        )
-                    })
-                }
-
-                document.getElementById("div-add-cart").style.display = "inline";
+                document.getElementById("add-cart").style.display = "inline";
             } else {
 
-                document.getElementById("div-add-cart").style.display = "none";
+                document.getElementById("add-cart").style.display = "none";
             }
         })
 
-        document.getElementById("add-cart").addEventListener('click', () => {
+        document.getElementById("add-cart").addEventListener('click', async () => {
 
             let products = [];
-            let cart = document.getElementById('carts');
-
-            if (cart.value == '' || cart.value == null ) {
-
-                alert("First you need to select a Cart.")
-                return;
-            }
 
             let options = document.querySelectorAll('.option:checked')
 
@@ -73,8 +52,30 @@ require_once("../Components/headerIndex.html");
 
                     products.push(e.id)
                 })
-            }
 
+                let user = await JSON.parse(localStorage.getItem('user'));
+
+                if (user.id == null || user.id == undefined) {
+
+                    logout()
+                } else {
+
+
+                    let response = await addToCart({products: products, user_id: user.id});
+
+                    if (response['success'] == true) {
+
+                        options.forEach((e) => {
+
+                            e.checked = false
+                        })
+                        document.getElementById("add-cart").style.display = "none";
+                    }
+                }
+            } else {
+
+                document.getElementById("add-cart").style.display = "none";
+            }
         })
     })
 </script>

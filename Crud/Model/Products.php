@@ -22,7 +22,7 @@ class Products
                 id INT (8) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 name VARCHAR (50) NOT NULL,
                 price DECIMAL (10) NOT NULL,
-                supplier_id INT (8) NOT NULL,
+                supplier_id INT (8) UNSIGNED NOT NULL,
                 FOREIGN KEY (supplier_id) REFERENCES suppliers(id)
                 );";
     }
