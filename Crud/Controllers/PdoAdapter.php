@@ -113,7 +113,7 @@ class PdoAdapter
             $sql .= "$fields) VALUES($values);";
 
             $this->instance->exec($sql);
-            return ["success" => true];
+            return ["success" => true, "data" => $data];
         } catch (PDOException $e) {
 
             throw new Exception("Fail when try insert register: {$e->getMessage()}");

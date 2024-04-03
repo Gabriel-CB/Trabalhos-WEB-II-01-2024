@@ -36,9 +36,9 @@ require_once("../Components/headerAddOrEdit.html");
         /** Sharing the Suppliers*/
         const suppliers = await renderEdit("Suppliers", ["id", "name", "document", "age", "mail"], null, true);
 
-        if (suppliers != null && suppliers.length > 0) {
+        if (suppliers != null && suppliers['data'] != null && suppliers['data'].length > 0) {
 
-            suppliers.forEach((item) => {
+            suppliers['data'].forEach((item) => {
                 document.getElementById("supplier-id").insertAdjacentHTML('beforeend',
                     `<option value="${item.id}">` +
                     `  ${item.name} - ${item.id}` +
