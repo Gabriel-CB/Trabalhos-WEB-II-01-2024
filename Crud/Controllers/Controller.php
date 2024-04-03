@@ -11,9 +11,20 @@ try {
     $model = $_POST['model'];
     $event = $_POST['event'];
 
+    /** IF is user insert/edit, do the hash with password */
+    if ($model == 'Users') {
+
+        if (!empty($values['password'])) {
+
+            $values['password'] = hash("sha256", $values['password']);
+        } else if (!empty($conditions['password'])) {
+
+            $conditions['password'] = hash("sha256", $conditions['password']);
+        }
+    }
+
     /** @var PdoAdapter $PDO */
     $PDO = new PdoAdapter($model);
-
 
     switch ($event) {
 

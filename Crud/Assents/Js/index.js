@@ -23,8 +23,12 @@ async function renderIndex(pageName, tableName, fields) {
             fields.forEach((field) => {
 
                 if (field == 'id') {
+                    if (pageName == "Products") {
 
-                    tableFiels += `<th scope="row">${item.id}</th>`;
+                        tableFiels += `<th scope="row"><input style="margin-right: 5px" type="checkbox" id="${item.id}" class="option">${item.id}</th>`;
+                    } else {
+                        tableFiels += `<th scope="row">${item.id}</th>`;
+                    }
                 } else {
 
                     tableFiels += `<td>${item[field]}</td>`;
@@ -51,9 +55,12 @@ async function renderIndex(pageName, tableName, fields) {
 
 async function renderEdit(pageName, fields, conditions = null, readOly = false) {
 
-    document.getElementById("page-name").textContent = `Edit ${pageName}`;
-    document.getElementById("cancel-btn").onclick = () => {
-        location.href = "./index.php"
+    if (readOly == false) {
+
+        document.getElementById("page-name").textContent = `Edit ${pageName}`;
+        document.getElementById("cancel-btn").onclick = () => {
+            location.href = "./index.php"
+        }
     }
 
     const data = {
@@ -80,23 +87,26 @@ async function renderEdit(pageName, fields, conditions = null, readOly = false) 
         }
     }
 
-    return response['data'] ?? [];
+    return response ?? [];
 }
 
 async function addOrEdit(tableName, values, conditions = null, url = "./index.php") {
 
     const data = {
         "model": tableName,
-        "event": values.id == "" ? "insert" : "update",
+        "event": values.id == "" || values.id == undefined ? "insert" : "update",
         "values": values,
         "conditions": conditions
     }
 
     let response = await request(data);
 
-    if (response['success'] == true) {
+    if (response['success'] == true && url != null) {
 
         window.location.href = url;
+    } else {
+
+        return response;
     }
 }
 
@@ -118,38 +128,48 @@ async function deleteItem(tableName, conditions) {
     }
 }
 
-async function login() {
+async function login(mail, password) {
 
-    if (confirm("Do you really exit ?")) {
+    let response = await renderEdit('Users', ['id', 'mail', 'password'], {mail: mail, password: password}, true);
 
+    if (response['success'] == true) {
 
-        var person = {};//cria um objeto vazio
+        if (response['data'][0] == null || response['data'][0] == undefined) {
 
+            alert("E-mail or password incorrect !!")
+        } else {
+            await localStorage.setItem('user', JSON.stringify({
+                id: response['data'][0].id,
+                mail: response['data'][0].mail,
+                password: response['data'][0].password,
+            }));
 
-        localStorage.setItem('person', JSON.stringify(person));//Grava em Json
-        formulario.reset();
-        function ler(){
-            var person = JSON.parse(localStorage.getItem('person'));
-            document.getElementById("result").innerHTML = "Nome: " + person.nome +
-                "<br>Idade: " + person.idade +
-                "<br>Sexo: " + person.sexo +
-                "<br>Estado Civil: " + person.est_civil;
-        }
-
-        if (response.success == true) {
-
-            window.location.reload();
+            window.location.href = "../../Template/Home/Index.php";
         }
     }
 }
 
+async function checkSesion() {
+
+    let user = JSON.parse(localStorage.getItem('user'));
+
+    if (user != null && user != undefined && user.password != null && user.password != undefined) {
+
+        return;
+    }
+
+    logout();
+}
+
 async function logout() {
 
-    if (confirm("Do you really exit ?")) {
+    localStorage.removeItem('user');
 
+    /** Verifica se o usuário já está na tela de login */
+    let url = window.location.pathname.split('/');
+    if (url[url.length - 2] != 'Login') {
 
         window.location.href = "../Login/index.php";
-
     }
 }
 
@@ -180,3 +200,5 @@ async function request(data) {
 
     return response;
 }
+
+checkSesion();
