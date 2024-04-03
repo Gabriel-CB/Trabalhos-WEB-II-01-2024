@@ -11,6 +11,8 @@ body {
     padding: 50px;
     margin: auto;
     display: flex;
+    max-width: 750px;
+    width: 100%;
 
     h4 {
 

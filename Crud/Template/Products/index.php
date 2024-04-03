@@ -10,8 +10,8 @@ require_once("../Components/headerIndex.html");
         <th scope="col">ID</th>
         <th scope="col">Name</th>
         <th scope="col">Price</th>
-        <th scope="col">Suplier</th>
-        <th scope="col" class="col-2">Action</th>
+        <th scope="col">Supplier</th>
+        <th scope="col" class="col-2">Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -25,6 +25,6 @@ require_once("../Components/headerIndex.html");
 
     document.addEventListener("DOMContentLoaded", function (event) {
 
-        renderIndex("Products", "products-table");
+        renderIndex("Products", "products-table", ["id", "name", "price", "supplier_id"]);
     })
 </script>
