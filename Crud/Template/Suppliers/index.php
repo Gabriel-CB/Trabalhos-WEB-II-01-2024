@@ -9,9 +9,10 @@ require_once("../Components/headerIndex.html");
     <tr>
         <th scope="col">ID</th>
         <th scope="col">Name</th>
-        <th scope="col">CPF</th>
-        <th scope="col">Cell Phone</th>
-        <th scope="col" class="col-2">Action</th>
+        <th scope="col">Document</th>
+        <th scope="col">E-mail</th>
+        <th scope="col">age</th>
+        <th scope="col" class="col-2">Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -25,6 +26,6 @@ require_once("../Components/headerIndex.html");
 
     document.addEventListener("DOMContentLoaded", function (event) {
 
-        renderIndex("Suppliers", "supplier-table");
+        renderIndex("Suppliers", "supplier-table", ['id','name', 'document', 'mail', 'age'], );
     })
 </script>
