@@ -5,7 +5,7 @@ require_once("../Components/headerAddOrEdit.html");
 ?>
 
 <form style="margin: 20px 0; display: flex; flex-direction: column; gap:10px">
-    <input type="hidden" required id="id" value="<?= $_GET['id'] ?? '' ?>">
+    <input type="hidden" required name="id" id="id" value="<?= $_GET['id'] ?? '' ?>">
     <div class="form-group">
         <label for="name">Name</label>
         <input type="text" required class="form-control" name="name" id="name" placeholder="Name of the Product">
