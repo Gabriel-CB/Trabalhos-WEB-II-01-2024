@@ -17,7 +17,7 @@ class Suppliers
                     id INT (8) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                     name VARCHAR (50) NOT NULL,
                     document VARCHAR (15) NOT NULL,
-                    mail DECIMAL (10) NOT NULL,
+                    mail VARCHAR (100) NOT NULL,
                     age INT (3) NOT NULL
                     );";
     }
