@@ -32,12 +32,13 @@ class PdoAdapter
     function getInstance()
     {
         try {
-            if (empty($instance)) {
+            if (empty($this->instance)) {
 
-                $instance = $this->connection();
+                return $this->connection();
+            } else {
+
+                return $this->instance;
             }
-
-            return $instance;
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
@@ -52,11 +53,8 @@ class PdoAdapter
             return $conn;
         } catch (PDOException $e) {
 
-            echo "Connection creation failed: " . $e->getMessage() . "<br>";
-
             if (strpos($e->getMessage(), "Unknown database '$this->DB_NAME'")) {
 
-                echo "Connection null, creating DB for the first time" . "<br>";
                 $conn = $this->createDB();
                 return $conn;
             }
@@ -70,7 +68,7 @@ class PdoAdapter
             $con = new PDO("mysql:host=$this->SERVER_NAME", $this->USER_NAME, $this->PASSWORD);
             $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            $sql = "CREATE DATABASE IF NOT EXISTS $this->DB_NAME";
+            $sql = "CREATE DATABASE IF NOT EXISTS {$this->DB_NAME}; USE {$this->DB_NAME}";
             $con->exec($sql);
 
             return $con;
@@ -97,7 +95,7 @@ class PdoAdapter
             $fields = "";
             $values = "";
 
-            $sql = "INSERT INTO {$this->table->TABLE_NAME} (";
+            $sql = "INSERT INTO {$this->DB_NAME}.{$this->table->TABLE_NAME} (";
 
             foreach ($data as $field => $value) {
 
@@ -153,7 +151,7 @@ class PdoAdapter
                 $conditionsFormated = substr($conditionsFormated, 0, -4);
             }
 
-            $sql = "SELECT $fieldsFormated from {$this->table->TABLE_NAME} $conditionsFormated";
+            $sql = "SELECT $fieldsFormated from {$this->DB_NAME}.{$this->table->TABLE_NAME} $conditionsFormated";
             $result = $this->instance->query($sql);
 
             return ["success" => true, "data" => $result->fetchAll()];
@@ -191,7 +189,7 @@ class PdoAdapter
             }
 
 
-            $sql = "UPDATE {$this->table->TABLE_NAME} SET $fieldsFormated $conditionsFormated";
+            $sql = "UPDATE {$this->DB_NAME}.{$this->table->TABLE_NAME} SET $fieldsFormated $conditionsFormated";
 
             $this->instance->query($sql);
 
@@ -221,7 +219,7 @@ class PdoAdapter
                 $conditionsFormated = substr($conditionsFormated, 0, -4);
             }
 
-            $sql = "DELETE FROM {$this->table->TABLE_NAME} $conditionsFormated";
+            $sql = "DELETE FROM {$this->DB_NAME}.{$this->table->TABLE_NAME} $conditionsFormated";
 
             $this->instance->query($sql);
 
